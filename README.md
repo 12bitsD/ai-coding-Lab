@@ -1,5 +1,7 @@
 # 🧪 AI Coding 实验手记
 
+[English Version](./README-en.md)
+
 > 从产品定义到代码生成到持续维护，能不能全程让 AI 来？
 
 这是一个真实项目驱动的实验系列。我用 **ConceptTree**（AI 学习路径规划器）作为实验对象，验证和改厨一套 "AI-friendly" 的开发流程和方法论。
