@@ -1,5 +1,7 @@
 # 1 让AI写PRD，然后让AI读懂它
 
+[English Version](./01-ai-readable-prd-en.md)
+
 ## 一个让我崩溃的数字：2000字
 
 我让Claude帮我写一个页面的前端代码。
