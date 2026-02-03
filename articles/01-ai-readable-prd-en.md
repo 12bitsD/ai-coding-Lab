@@ -1,85 +1,81 @@
-# 1 Writing an AI-Readable PRD and Helping AI Understand It
+# 1 Writing an AI-Readable PRD
 
 ## A Number That Broke Me: 2,000 Words
 
-I asked Claude to write the frontend code for a single page.
+I asked Claude to write frontend code for a single page.
 
-Version 1: Missing empty states. Fix.
+Version 1: missing empty states. Fix. Version 2: missing loading states. Fix. Version 3: missing error handling. Fix. Version 4: state transition logic wrong. Fix. Version 5: finally works.
 
-Version 2: Missing loading states. Fix.
+Then I counted my requirement description: 2,000 words.
 
-Version 3: Missing error handling. Fix.
+For one page. I could've written the code myself in maybe 1,500 lines.
 
-Version 4: State transition logic was wrong. Fix.
+Something's off. Isn't AI supposed to make me faster? Why am I spending more time than writing it myself?
 
-Version 5: Finally working.
+Figured it out later: the problem wasn't AI. It was me.
 
-Then I counted the length of my requirement description: **2,000 words**.
-
-Just for one page. 2,000 words. I could have written the code myself in maybe 1,500 lines.
-
-**Something is wrong. Isn't AI supposed to make me faster? Why am I spending more time than writing it myself?**
-
-Later, I realized: The problem wasn't the AI; it was me.
-
-My requirement descriptions were written for humans—vague, jumping between points, and assuming the reader would fill in the blanks.
-
-But AI doesn't "fill in the blanks." If you leave something out, it simply doesn't do it.
+My requirements were written for humans—vague, jumping around, assuming the reader would fill in the gaps. But AI doesn't fill gaps. If you leave something out, it simply doesn't do it.
 
 ------
 
-## Why: AI Doesn't "Fill in the Blanks"
+## AI Doesn't Fill in the Blanks. That's the Core Problem.
 
-Traditional PRDs are written for humans: they are vague, non-linear, and omit common sense. Humans use intuition.
+Traditional PRDs are for humans: vague, non-linear, skipping common sense. Humans infer.
 
-AI does not: omit a state, and it won't be handled; forget an error, and it won't be considered; use an ambiguous word, and it will implement it randomly.
+AI doesn't: skip a state, it won't handle it; forget an error case, it won't consider it; use an ambiguous word, it'll implement whatever.
 
-That’s why we need an **AI-readable PRD**—it's not about a change in format, but a change in the granularity of decision-making.
+Hence AI-readable PRD—not a format change, but a granularity change in decision-making.
+
+Put simply: questions that developers used to ask you? Now you answer them in the PRD phase. Don't answer, AI guesses.
 
 ------
 
-## Method: I Choose, AI Writes
+## The Method: I Choose, AI Writes
 
 ```
 Traditional: I write doc → Dev asks me → I edit → Dev asks again → I edit again → ...
-Now: AI asks me → I choose A/B/C → AI writes doc → Code generated directly
+Now: AI asks me → I pick A/B/C → AI writes doc → Code generated directly
 ```
 
-**Shift the "questions developers will ask" to the PRD stage, and let AI do the asking.**
+Core idea: front-load "questions developers would ask" to the PRD phase. Let AI do the asking.
 
 ### Starting Prompt
 
 ```
 I want to build [Product Name]. Background: [One sentence].
-Help me create a PRD. Use Socratic questioning—ask only one question at a time, providing 2-3 options for me to choose from.
+Help me create a PRD. Socratic questioning—ask one question at a time, give 2-3 options for me to choose.
 ```
 
-AI will follow up: Who are the users? Core features? State transitions? What should the empty state look like?
+AI will follow up: Who are the users? Core features? State transitions? What does empty state look like?
 
-I only choose A, B, or C. No need to organize language, and nothing gets missed.
+I just pick A, B, or C. No need to organize language, nothing gets missed.
+
+The upside: fast decisions, high coverage. The downside: if you don't deeply understand your product, you'll find yourself picking options without really knowing why. When that happens, either pause to think, or ask AI to break down the tradeoffs before you choose.
 
 ------
 
 ## 8 Steps
 
-| Step | Action | My Role |
+| Step | What Happens | My Role |
 | :--- | :--- | :--- |
 | 1. Start | AI asks clarifying questions | Answer |
 | 2. Define Concepts | AI lists core entities and states | Choose/Confirm |
 | 3. Define Page Structure | AI lists pages and navigation | Confirm |
-| 4. Detail Page-by-Page | AI draws ASCII mockups, asks element by element | Choose A/B/C |
+| 4. Detail Each Page | AI draws ASCII mockups, asks element by element | Pick A/B/C |
 | 5. Define AI Interface | AI defines input/output JSON | Confirm |
 | 6. Define Data Structure | AI outputs table schema | Confirm |
 | 7. Export PRD | Say "Update PRD" | Accept |
-| 8. Verify Implementation | Feed code to AI to check for discrepancies | Decide |
+| 8. Verify Implementation | Feed code to AI, check for discrepancies | Decide |
 
-**3-page MVP, approx. 2 hours, 50-80 choices.**
+3-page MVP: ~2 hours, 50-80 choices.
+
+That's my feel. Your mileage may vary. More complex pages, more states, more time. But compared to the cost of "PRD done, then realize dev understood something completely different"—worth it.
 
 ------
 
-## Tips After Hitting Walls
+## Lessons From Hitting Walls
 
-### 1. ASCII Prototypes > Figma
+### 1. ASCII Prototypes Beat Figma
 
 Don't give AI Figma screenshots. Let AI output ASCII directly:
 
@@ -97,11 +93,13 @@ Don't give AI Figma screenshots. Let AI output ASCII directly:
 +------------------+
 ```
 
-AI can both generate and parse this. It forces coverage of all states and is fast to modify.
+Why better than Figma?
 
-### 2. State Enums > Natural Language
+AI can generate and parse it. Forces coverage of all states. Fast to modify. Figma screenshots AI can only "see," can't "operate on," and easily ignores states not drawn in the screenshot.
 
-Lesson learned: I wrote "the plan can start, finish, or be archived," and the AI generated identical UIs for "start" and "finish."
+### 2. State Enums Beat Natural Language
+
+Lesson learned: I wrote "the plan can start, finish, or be archived," AI generated identical UIs for "start" and "finish."
 
 Now I write:
 
@@ -118,11 +116,13 @@ active → completed: all tasks done
 any → archived: click "Archive"
 ```
 
-Enum + UI differences + transition conditions = no omissions.
+Enum + UI differences + transition conditions = nothing gets missed.
+
+Natural language's problem is ambiguity. Is "start" an action or a state? AI can't tell. Enums force you to spell out what each state looks like in UI.
 
 ### 3. JSON Schema for AI Interfaces
 
-Got AI features? Don't use natural language; define the JSON directly:
+Got AI features? Don't use natural language. Define JSON directly:
 
 ```json
 // Input
@@ -132,13 +132,15 @@ Got AI features? Don't use natural language; define the JSON directly:
 {"path": [{"node": "Tensor Basics", "hours": 2}, {"node": "Autograd", "hours": 3}]}
 ```
 
-AI can copy this directly when writing code, ensuring field names match.
+AI copies this directly when writing code. Field names won't mismatch.
+
+Problem with natural language interface descriptions: you say "return the learning path," AI might return an array, might return an object, field name might be path, might be learningPath, might be result. JSON Schema locks it down. Saves fixing later.
 
 ### 4. SOP for AI Maintenance
 
-After AI generates code, future updates can get messy—the AI might not know which file to edit or project conventions.
+After AI generates code, future edits often go sideways—doesn't know which file to change, doesn't know project conventions.
 
-Add this to the PRD:
+Add this to PRD:
 
 ```
 ## AI Maintenance Guide
@@ -146,21 +148,23 @@ Add page: Copy existing structure → Update routes → Add nav entry
 Add state: Update type defs → Update state management → Check all references
 ```
 
-This section is for the AI, not humans. When you say "add a new page," the AI follows the guide and doesn't break things.
+This section is for AI, not humans. Say "add a new page," AI follows the guide, doesn't break things.
+
+There's a trade-off here: more detailed guide = less AI chaos, but maintaining the guide itself costs time. My approach: only document the operations most likely to go wrong, let AI figure out the rest.
 
 ------
 
 ## Quick Commands
 
-During the PRD process, use these to speed up the conversation:
+During PRD process, these speed up the conversation:
 
 | Scenario | You Say |
 | :--- | :--- |
-| Advance process | Continue |
-| Indecisive | You decide / Not important |
+| Move forward | Continue |
+| Don't want to overthink | You decide / Not important |
 | Get document | Update PRD |
 | Change decision | Change XX to YY |
-| Check for omissions| Review for anything missed |
+| Check for gaps | Review for anything missed |
 | Skip current page | Skip this page |
 
 ------
@@ -177,22 +181,22 @@ During the PRD process, use these to speed up the conversation:
 | Define Data Struct | 5 min | Confirm once |
 | Export PRD | 1 min | Say "Update PRD" |
 
-**3-page MVP**: ~2 hours, 50-80 choices.
+3-page MVP: ~2 hours, 50-80 choices.
 
 ------
 
-## Next Preview
+## Next Up
 
-Now that the PRD is done, the next step is generating code from it.
+PRD done. Next step: getting AI to generate code from it.
 
-I will try several approaches:
+I'll try three approaches:
 
-- **Approach A**: Feed the entire PRD to Claude/GPT for one-shot generation.
-- **Approach B**: Split by page, generate individually, then assemble.
-- **Approach C**: Let AI generate the project structure/skeleton first, then fill in details.
+- Approach A: Feed entire PRD to Claude/GPT, one-shot generation
+- Approach B: Split by page, generate individually, then assemble
+- Approach C: Have AI generate project structure/skeleton first, then fill in details
 
-Then I'll compare which method produces higher quality and more maintainable code.
+Then compare which produces higher quality, more maintainable code. My bet's on C, but gotta run it to know.
 
 ------
 
-*This series will be continuously updated. I hit the walls in real projects so you don't have to.*
+*I hit walls in real projects, then write them down. Next one coming.*
