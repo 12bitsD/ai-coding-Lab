@@ -26,6 +26,12 @@
 | 04 | [让AI在已有代码库上做增量开发](articles/04-incremental-dev.md) | 待写 | 上下文管理、变更隔离、回归测试 |
 | 05 | [复盘：哪些地方AI能替代人，哪些是坑](articles/05-retrospective.md) | 待写 | 经验总结、适用边界、踩坑记录 |
 
+## 案例研究
+
+| 项目 | 内容 | 亮点 |
+|------|------|------|
+| [OpenClaw (ClawdBot)](case-studies/openclaw/) | Peter 的 Vibe-coding 典范拆解 | AGENTS.md + SKILL.md + Workflow 三层模型 |
+
 ## Prompt模板
 
 | 文件 | 用途 | 适用场景 |
